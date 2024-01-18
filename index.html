@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP</title>
+    <!-- <link rel="stylesheet" href="./style/style.css"> -->
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body{
+            display: flex;
+            justify-content: center;
+        }
+
+        #mainContainer{
+            width: 60vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #header{
+            height: 30vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #imageCard > img{
+            width: 150px;
+        }
+        
+        #form{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        
+        #dcCard{
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+        
+        .input-card{
+            height: 40px;
+            border-radius: 8px;
+            border: 1px solid #D0D5DD;
+            padding: 10px, 14px, 10px, 14px;
+            width: 100%; 
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .input-card > img{
+            height: 20px;
+            width: 20px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .input-card > input{
+            width: 100%;
+            margin-right: 10px;
+            height: 20px;
+            border: none;
+        }
+        
+        #phoneCard{
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        #checkBoxCard{
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        #submitButton{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 96px;
+            font-size: 16px;
+        }
+
+        #submitButton > button{
+            width: 100%;
+            height: 48px;
+        }
+
+        #checkBoxCard button{
+            font-size: 12px;
+            border: none;
+            background: none;
+            color: #FF8736;
+            cursor: pointer;
+        }
+
+        /* util  */
+        .mb-6{
+            margin-bottom: 6px;
+        }
+
+        .mb-16{
+            margin-bottom: 16px;
+        }
+
+        /* modal  */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            top: 0;
+            left: 0;
+            /* transform: translate(-50%, -50%); */
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(12, 17, 29, 0.9)
+        }
+
+        .modal-content {
+            /* top: 0;
+            left: 0; */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60vw; /* Could be more or less, depending on screen size */
+            background-color: white;
+            font-size: 14px;
+            border-radius: 30px;
+            /* position: absolute; */
+            padding: 16px;
+            text-align: justify;
+        }
+
+        .modal-content > h2{
+            font-size: 18px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .modal-content > p{
+            margin-bottom: 10px;
+        }
+
+        .close {
+            margin-top: 10px;
+            width: 100%;
+            height: 48px;
+            border-radius: 24px;
+            padding: 12px 18px 12px 18px;
+            background-color: #FF8736;
+            border: 1px solid #FF8736;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            text-decoration: none;
+            cursor: pointer;
+            color: rgb(227, 219, 219);
+            background-color: #df7b38;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="mainContainer">
+        <div id="header">
+            <div id="imageCard">
+                <Img src="./images/logo_bni.png"></Img>
+            </div>
+        </div>
+        <div id="form">
+            <form action="./otp-confirmation.html">
+                <div id="dcCard">
+                    <p class="mb-6"><b>Nomor Kartu Debit</b></p>
+                    <div class="input-card">
+                        <img src="./images/dc-icon.svg">
+                        <input type="text" id="dcInput" placeholder="Masukkan nomor kartu debit">
+                    </div> 
+                </div>
+                <div id="phoneCard">
+                    <p class="mb-6"><b>Nomor Telepon</b></p>
+                    <div class="input-card">
+                        <img src="./images/phone-number-icon.svg">
+                        <input type="text" id="phoneInput" placeholder="Masukkan nomor telepon">
+                    </div>
+                    <p>Masukkan nomor handphone yang terdaftar di BNI</p>
+                </div>
+                <div id="checkBoxCard">
+                    <input type="checkbox" class="mb-16" id="check1" name="check1">
+                    <label for="check1">Dengan ini saya sudah menyetujui <button type="button" id="termsAndConditions"><u>Syarat dan Ketentuan</u></button> layanan BNI.</label><br>
+                    <input type="checkbox" id="check2" name="check2">
+                    <label for="check2">Dengan ini saya menyetujui agar dapat mengakses fitur <b>Pembayaran</b> melalui aplikasi/system/web “PT Tokopedia”.</label><br>
+                </div>
+                <div id="submitButton">
+                    <button type="submit">Lanjutkan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- modal  -->
+    <div id="termsAndConditionsModal" class="modal">
+        <div class="modal-content">
+            <h2>Syarat dan ketentuan</h2>
+            <p>Lorem ipsum dolor sit amet consectetur. Tortor tincidunt ornare lacus enim odio diam tellus sodales malesuada. Elementum senectus turpis dui id ac lectus. Venenatis a at nulla in. Cursus justo dis nulla morbi quam integer posuere. Nullam turpis vivamus tincidunt etiam nisl nulla amet tincidunt. Posuere cursus dignissim facilisi cursus feugiat nisi. Ut hendrerit sagittis elit sapien at a sodales molestie.</p>
+            <p>Lorem ipsum dolor sit amet consectetur. Tortor tincidunt ornare lacus enim odio diam tellus sodales malesuada. Elementum senectus turpis dui id ac lectus. Venenatis a at nulla in. Cursus justo dis nulla morbi quam integer posuere. Nullam turpis vivamus tincidunt etiam nisl nulla amet tincidunt. Posuere cursus dignissim facilisi cursus feugiat nisi. Ut hendrerit sagittis elit sapien at a sodales molestie.</p>
+            <button class="close" type="button" id="closeTermsAndConditions">Tutup</button>
+        </div>
+    </div>
+    <script>
+        // Get the modal
+        var modal = document.getElementById("termsAndConditionsModal");
+        
+        // Get the button that opens the modal
+        var btn = document.getElementById("termsAndConditions");
+
+        // Get the <span> element that closes the modal
+        var closeBtn = document.getElementById("closeTermsAndConditions");
+
+        // When the user clicks on the button, open the modal
+        btn.onclick = function() {
+            modal.style.display = "flex";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        } 
+        // $("#dcInput").mask("9999-9999-9999-9999");
+
+        // $('#checkBoxCard input[type="checkbox"]').change(function(){
+        //     var allChecked = !!$('#checkBoxCard input[type="checkbox"]:not(:checked)').length;
+        //     $('.toggle-disabled').prop('disabled', allChecked);
+        // })
+    </script>
+</body>
+</html>
