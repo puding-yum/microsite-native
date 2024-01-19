@@ -3,25 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OTP</title>
-    <!-- <link rel="stylesheet" href="./style/style.css"> -->
+    <title>Binding - Input Form</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./images/plain-logo.svg" />
     <style>
         *{
             padding: 0;
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body{
-            display: flex;
-            justify-content: center;
-        }
-
-        #mainContainer{
-            width: 60vw;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
         #header{
@@ -38,9 +26,11 @@
         #form{
             display: flex;
             justify-content: center;
-            width: 100%;
         }
         
+        #form > form{
+            width: 60vw;
+        }
         
         #dcCard{
             margin-bottom: 16px;
@@ -82,6 +72,14 @@
             font-size: 12px;
         }
 
+        #checkBoxCard a{
+            font-size: 12px;
+            border: none;
+            background: none;
+            color: #FF8736;
+            cursor: pointer;
+        }
+
         #submitButton{
             display: flex;
             justify-content: center;
@@ -91,16 +89,31 @@
         }
 
         #submitButton > button{
+            color: white;
+            font-size: 16px;
+            background-color: #FF8736;
+            border: 1px solid #FF8736;
             width: 100%;
             height: 48px;
+            border-radius: 24px;
         }
 
-        #checkBoxCard button{
-            font-size: 12px;
-            border: none;
-            background: none;
-            color: #FF8736;
+        #submitButton > button:hover{
             cursor: pointer;
+            color: rgb(227, 219, 219);
+            background-color: #df7b38;
+        }
+        
+        #loadingIcon{
+            display: none;
+        }
+        
+        #loadingIcon > img{
+            animation: flipAnimation 5s infinite linear;
+        }
+
+        @keyframes flipAnimation {
+            100% {transform: rotate(360deg);}
         }
 
         /* util  */
@@ -166,51 +179,84 @@
             font-weight: bold;
         }
 
-        .close:hover,
-        .close:focus {
+        .close:hover{
             text-decoration: none;
             cursor: pointer;
             color: rgb(227, 219, 219);
             background-color: #df7b38;
         }
+
+        /* iPads (landscape) ----------- */
+        @media only screen and (max-width : 1224px) {
+            #header{
+                height: 200px;
+            }
+        }
+
+        /* Smartphones (landscape) ----------- */
+        @media only screen and (max-width : 768px) {
+            #header{
+                height: 150px;
+            }
+
+            #imageCard > img{
+                width: 120px;
+            }
+
+            #form{
+                padding: 0 48px 24px 48px;
+            }
+            
+            #form > form{
+                width: 100%;
+            }
+        }
+
+        /* Smartphones (portrait) (ie: Galaxy 1) */
+        @media only screen and (max-width : 321px) {
+            #form{
+                padding: 0 24px 24px 24px;
+            }
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-    <div id="mainContainer">
-        <div id="header">
-            <div id="imageCard">
-                <Img src="./images/logo_bni.png"></Img>
+    <div id="header">
+        <div id="imageCard">
+            <Img src="./images/Logo BNI - Primary.svg"></Img>
+        </div>
+    </div>
+    <div id="form">
+        <form>
+            <div id="dcCard">
+                <p class="mb-6"><b>Nomor Kartu Debit</b></p>
+                <div class="input-card">
+                    <img src="./images/dc-icon.svg">
+                    <input type="text" id="dcInput" placeholder="Masukkan nomor kartu debit" required>
+                </div> 
             </div>
-        </div>
-        <div id="form">
-            <form action="./otp-confirmation.html">
-                <div id="dcCard">
-                    <p class="mb-6"><b>Nomor Kartu Debit</b></p>
-                    <div class="input-card">
-                        <img src="./images/dc-icon.svg">
-                        <input type="text" id="dcInput" placeholder="Masukkan nomor kartu debit">
-                    </div> 
+            <div id="phoneCard">
+                <p class="mb-6"><b>Nomor Telepon</b></p>
+                <div class="input-card">
+                    <img src="./images/phone-number-icon.svg">
+                    <input type="text" id="phoneInput" placeholder="Masukkan nomor telepon" required>
                 </div>
-                <div id="phoneCard">
-                    <p class="mb-6"><b>Nomor Telepon</b></p>
-                    <div class="input-card">
-                        <img src="./images/phone-number-icon.svg">
-                        <input type="text" id="phoneInput" placeholder="Masukkan nomor telepon">
-                    </div>
-                    <p>Masukkan nomor handphone yang terdaftar di BNI</p>
-                </div>
-                <div id="checkBoxCard">
-                    <input type="checkbox" class="mb-16" id="check1" name="check1">
-                    <label for="check1">Dengan ini saya sudah menyetujui <button type="button" id="termsAndConditions"><u>Syarat dan Ketentuan</u></button> layanan BNI.</label><br>
-                    <input type="checkbox" id="check2" name="check2">
-                    <label for="check2">Dengan ini saya menyetujui agar dapat mengakses fitur <b>Pembayaran</b> melalui aplikasi/system/web “PT Tokopedia”.</label><br>
-                </div>
-                <div id="submitButton">
-                    <button type="submit">Lanjutkan</button>
-                </div>
-            </form>
-        </div>
+                <p>Masukkan nomor handphone yang terdaftar di BNI</p>
+            </div>
+            <div id="checkBoxCard">
+                <input type="checkbox" id="check1" name="check1" required>
+                <label for="check1">Dengan ini saya sudah menyetujui <a type="button" id="termsAndConditions"><u>Syarat dan Ketentuan</u></a> layanan BNI.</label><br>
+                <input type="checkbox" id="check2" name="check2" required>
+                <label for="check2">Dengan ini saya menyetujui agar dapat mengakses fitur <b>Pembayaran</b> melalui aplikasi/system/web “PT Tokopedia”.</label><br>
+            </div>
+            <div id="submitButton">
+                <button type="submit" id="submitForm">
+                    <span id="loadingIcon"><img src="./images/loader.svg"></span>
+                    <span id="buttonText">Lanjutkan</span>
+                </button>
+            </div>
+        </form>
     </div>
     
     <!-- modal  -->
@@ -223,37 +269,121 @@
         </div>
     </div>
     <script>
-        // Get the modal
-        var modal = document.getElementById("termsAndConditionsModal");
-        
-        // Get the button that opens the modal
-        var btn = document.getElementById("termsAndConditions");
+        $(document).ready(function(){
+            // modal handler
+            $("#termsAndConditions").on("click", function() {
+                console.log("helo")
+                $("#termsAndConditionsModal").css("display", "flex")
+            })
+            
+            $("#closeTermsAndConditions").on("click", function() {
+                $("#termsAndConditionsModal").css("display", "none")
+            })
+            
+            $(window).on("click", function(event) {
+                if (event.target == document.getElementById("termsAndConditionsModal")) {
+                    $("#termsAndConditionsModal").css("display", "none")
+                }
+            }) 
+            
+            // cc input formatter
+            let ccNumberInput = $("#dcInput")
+            let ccNumberPattern = /^\d{0,16}$/g
+            let ccNumberSeparator = "-"
+            let ccNumberInputOldValue
+            let ccNumberInputOldCursor
 
-        // Get the <span> element that closes the modal
-        var closeBtn = document.getElementById("closeTermsAndConditions");
-
-        // When the user clicks on the button, open the modal
-        btn.onclick = function() {
-            modal.style.display = "flex";
-        }
-
-        // When the user clicks on <span> (x), close the modal
-        closeBtn.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
+            const mask = (value, limit, separator) => {
+                var output = [];
+                for (let i = 0; i < value.length; i++) {
+                    if ( i !== 0 && i % limit === 0) {
+                        output.push(separator);
+                    }
+                    
+                    output.push(value[i]);
+                }
+                
+                return output.join("");
             }
-        } 
-        // $("#dcInput").mask("9999-9999-9999-9999");
+                
+            const unmask = (value) => value.replace(/[^\d]/g, '')
 
-        // $('#checkBoxCard input[type="checkbox"]').change(function(){
-        //     var allChecked = !!$('#checkBoxCard input[type="checkbox"]:not(:checked)').length;
-        //     $('.toggle-disabled').prop('disabled', allChecked);
-        // })
+            const checkSeparator = (position, interval) => Math.floor(position / (interval + 1))
+            
+            const ccNumberInputKeyDownHandler = (e) => {
+                let el = e.target;
+                ccNumberInputOldValue = el.value;
+                ccNumberInputOldCursor = el.selectionEnd;
+            }
+            
+            const ccNumberInputInputHandler = (e) => {
+                console.log(e)
+                let el = e.target
+                console.log(el)
+                let newValue = unmask(el.value)
+                console.log(newValue)
+                let newCursorPosition;
+                
+                if (newValue.match(ccNumberPattern)) {
+                    newValue = mask(newValue, 4, ccNumberSeparator);
+                    
+                    newCursorPosition = 
+                        ccNumberInputOldCursor - checkSeparator(ccNumberInputOldCursor, 4) + 
+                        checkSeparator(ccNumberInputOldCursor + (newValue.length - ccNumberInputOldValue.length), 4) + 
+                        (unmask(newValue).length - unmask(ccNumberInputOldValue).length);
+                    
+                    el.value = (newValue !== "") ? newValue : "";
+                } else {
+                    el.value = ccNumberInputOldValue;
+                    newCursorPosition = ccNumberInputOldCursor;
+                }
+                
+                el.setSelectionRange(newCursorPosition, newCursorPosition);
+                
+                highlightCC(el.value);
+            }
+
+            ccNumberInput.on("keydown", ccNumberInputKeyDownHandler);
+            ccNumberInput.on("input", ccNumberInputInputHandler);
+
+            // on submit
+            $("#form").on("submit", function(e){
+                e.preventDefault();
+
+                let dc = $("#dcInput").val();
+                let phone = $("#phoneInput").val();
+                let check1 = $( "input[type=checkbox][name=check1]:checked" ).val();
+                let check2 = $( "input[type=checkbox][name=check2]:checked" ).val();
+
+                let data = {
+                    "debit_card": unmask(dc),
+                    "phone": phone,
+                    "check1": check1,
+                    "check2": check2
+                }
+
+                $("#buttonText").hide()
+                $("#loadingIcon").show()
+                $("#submitForm").attr("disabled", true);                   
+                $.ajax({
+                    type: 'post',
+                    url: 'http://localhost:8080/home',
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $("#loadingIcon").hide()
+                        $("#buttonText").show()
+                        
+                        if(data["debit_card"] == '0000111100001111'){
+                            location.href = "http://127.0.0.1:5500/otp.html"
+                        }
+
+                    }
+                });
+                $("#submitForm").attr("disabled", false);
+            })
+        })
+
     </script>
 </body>
 </html>

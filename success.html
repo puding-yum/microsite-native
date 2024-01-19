@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirm OTP</title>
+    <title>Binding - Success</title>
+    <link rel="shortcut icon" type="image/x-icon" href="./images/plain-logo.svg" />
     <style>
         *{
             padding: 0;
@@ -40,21 +42,57 @@
             align-items: center;
         }
 
+        #message{
+            width: 60vh;
+            text-align: center;
+        }
+        
+        #message > h1{
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* responsive hand phone */
+        @media only screen and (max-width: 600px) {
+            body{
+                padding: 24px;
+            }
+
+            #logo{
+                margin-top: 24px;
+                margin-bottom: 24px;
+            }
+
+            #form{
+                padding: 0;
+            }
+
+            #illustration{
+                margin-bottom: 24px;
+            }
+            
+            .timeout-otp{
+                margin-bottom: 20px;
+            }
+        }
+
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
 <body>
     <div id="header">
         <div id="logo">
-            <img src="./images/logo_bni.png">
+            <img src="./images/Logo BNI - Primary.svg">
         </div>
         <div id="illustration">
             <img src="./images/Illustration-success.svg">
         </div>
     </div>
     <div id="bodyContainer">
-        <h1>Kartu Berhasil Didaftarkan</h1>
-        <p>Pendaftaran kartu telah berhasil. Sekarang Anda bisa melakukan transaksi di “Tokopedia” dengan kartu debit Instan BNI.</p>
+        <div id="message">
+            <h1>Kartu Berhasil Didaftarkan</h1>
+            <p>Pendaftaran kartu telah berhasil. Sekarang Anda bisa melakukan transaksi di “Tokopedia” dengan kartu debit Instan BNI.</p>
+        </div>
     </div>
 </body>
 </html>
