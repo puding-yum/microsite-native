@@ -87,21 +87,16 @@
             height: 96px;
             font-size: 16px;
         }
-
+        
         #submitButton > button{
-            color: white;
+            color: #98A2B3;
+            background-color: #EAECF0;
+            border: 1px solid #EAECF0;
+            font-weight: 600;
             font-size: 16px;
-            background-color: #FF8736;
-            border: 1px solid #FF8736;
             width: 100%;
             height: 48px;
             border-radius: 24px;
-        }
-
-        #submitButton > button:hover{
-            cursor: pointer;
-            color: rgb(227, 219, 219);
-            background-color: #df7b38;
         }
         
         #loadingIcon{
@@ -222,11 +217,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-    <div id="header">
-        <div id="imageCard">
-            <Img src="./images/Logo BNI - Primary.svg"></Img>
+    <!-- <header> -->
+        <div id="header">
+            <div id="imageCard">
+                <Img src="./images/Logo BNI - Primary.svg"></Img>
+            </div>
         </div>
-    </div>
+    <!-- </header>
+<main>
+    <section>
+        
+    </section> -->
     <div id="form">
         <form>
             <div id="dcCard">
@@ -245,22 +246,21 @@
                 <p>Masukkan nomor handphone yang terdaftar di BNI</p>
             </div>
             <div id="checkBoxCard">
-                <input type="checkbox" id="check1" name="check1" required>
+                <input type="checkbox" id="check1" name="check1" value="check1" required>
                 <label for="check1">Dengan ini saya sudah menyetujui <a type="button" id="termsAndConditions"><u>Syarat dan Ketentuan</u></a> layanan BNI.</label><br>
-                <input type="checkbox" id="check2" name="check2" required>
+                <input type="checkbox" id="check2" name="check2" value="check2" required>
                 <label for="check2">Dengan ini saya menyetujui agar dapat mengakses fitur <b>Pembayaran</b> melalui aplikasi/system/web “PT Tokopedia”.</label><br>
             </div>
             <div id="submitButton">
-                <button type="submit" id="submitForm">
+                <button type="submit" id="submitForm" disabled>
                     <span id="loadingIcon"><img src="./images/loader.svg"></span>
                     <span id="buttonText">Lanjutkan</span>
                 </button>
             </div>
         </form>
     </div>
-    
-    <!-- modal  -->
-    <div id="termsAndConditionsModal" class="modal">
+      <!-- modal  -->
+      <div id="termsAndConditionsModal" class="modal">
         <div class="modal-content">
             <h2>Syarat dan ketentuan</h2>
             <p>Lorem ipsum dolor sit amet consectetur. Tortor tincidunt ornare lacus enim odio diam tellus sodales malesuada. Elementum senectus turpis dui id ac lectus. Venenatis a at nulla in. Cursus justo dis nulla morbi quam integer posuere. Nullam turpis vivamus tincidunt etiam nisl nulla amet tincidunt. Posuere cursus dignissim facilisi cursus feugiat nisi. Ut hendrerit sagittis elit sapien at a sodales molestie.</p>
@@ -268,6 +268,9 @@
             <button class="close" type="button" id="closeTermsAndConditions">Tutup</button>
         </div>
     </div>
+
+<!-- </main> -->
+    
     <script>
         $(document).ready(function(){
             // modal handler
@@ -317,11 +320,11 @@
             }
             
             const ccNumberInputInputHandler = (e) => {
-                console.log(e)
+                // console.log(e)
                 let el = e.target
-                console.log(el)
+                // console.log(el)
                 let newValue = unmask(el.value)
-                console.log(newValue)
+                // console.log(newValue)
                 let newCursorPosition;
                 
                 if (newValue.match(ccNumberPattern)) {
@@ -338,13 +341,101 @@
                     newCursorPosition = ccNumberInputOldCursor;
                 }
                 
-                el.setSelectionRange(newCursorPosition, newCursorPosition);
-                
-                highlightCC(el.value);
+                el.setSelectionRange(newCursorPosition, newCursorPosition);                
             }
 
             ccNumberInput.on("keydown", ccNumberInputKeyDownHandler);
             ccNumberInput.on("input", ccNumberInputInputHandler);
+
+            // disable submit if there are empties field
+            const nextButton = (input, check) => {
+                if (input || check) {
+                    $('#submitForm').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+                    $('#submitForm').css({                  
+                        "color": "#98A2B3",
+                        "background-color": "#EAECF0",
+                        "border": "1px solid #EAECF0"
+                    })
+                    $("#submitForm").hover(function() {
+                        $(this).css({
+                            "background-color": "#EAECF0",
+                            "cursor": "default",
+                            "color": "#98A2B3"
+                        })
+                    });                    
+                } else {
+                    $('#submitForm').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+                    $('#submitForm').css({
+                        "background-color": "#FF8736", 
+                        "color": "white",
+                        "border": "1px solid #FF8736",                  
+                    })
+                    $("#submitForm").hover(function() {
+                        $(this).css({
+                            "background-color": "#df7b38",
+                            "cursor": "pointer",
+                            "color": "rgb(227, 219, 219)"
+                        })
+                    });
+                }
+            }
+            
+            var inputEmpty = false;
+            var checkEmpty = false;
+
+            // handle reload page for nextButton
+            $('#form input[type=text]').each(function() {
+                // inputEmpty = false;
+
+                if ($(this).val() == '') {
+                    inputEmpty = true;
+                }
+                
+                // console.log(inputEmpty)
+                nextButton(inputEmpty, checkEmpty);
+            })
+
+            $('#form input:checkbox').each(function() {
+                // checkEmpty = false;
+
+                if ($(this).is(":checked") == false) {
+                    checkEmpty = true;
+                }
+            
+                // console.log(checkEmpty)
+                nextButton(inputEmpty, checkEmpty);
+            });
+
+            $('#form input[type=text]').keyup(function() {
+                inputEmpty = false;
+
+                $('#form input[type=text]').each(function() {
+                    // console.log($(this))
+                    if (($(this).val() == '')) {
+                        inputEmpty = true;
+                    }
+                })
+                
+                console.log(inputEmpty)
+                nextButton(inputEmpty, checkEmpty);
+            })
+
+            // enable nextButton on all fields filled
+            $('#form input:checkbox').on("change", function() {
+                checkEmpty = false;
+
+                $('#form input:checkbox').each(function() {
+                    // console.log("---")
+                    // console.log($(this).is(":checked"))
+
+                    if (($(this).is(":checked") == false)) {
+                        checkEmpty = true;
+                    }
+                });
+
+                console.log(checkEmpty)
+                nextButton(inputEmpty, checkEmpty);
+            });
 
             // on submit
             $("#form").on("submit", function(e){

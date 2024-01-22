@@ -107,21 +107,26 @@
             height: 96px;
         }
         
-        #submitButton > button{
+        /* #submitButton > button{
             color: white;
             font-size: 16px;
-            /* font-weight: bold; */
+            font-weight: bold; 
             background-color: #FF8736;
             border: 1px solid #FF8736;
             width: 100%;
             height: 48px;
             border-radius: 24px;
-        }
+        } */
 
-        #submitButton > button:hover{
-            cursor: pointer;
-            color: rgb(227, 219, 219);
-            background-color: #df7b38;
+        #submitButton > button{
+            color: #98A2B3;
+            background-color: #EAECF0;
+            border: 1px solid #EAECF0;
+            font-weight: 600;
+            font-size: 16px;
+            width: 100%;
+            height: 48px;
+            border-radius: 24px;
         }
 
         #loadingIcon{
@@ -185,12 +190,12 @@
             <h1>Konfirmasi OTP</h1>
             <p>Cek 6 digit kode yang dikirim ke SMS nomor <b>+628123456789</b></p>
             <div id="otp-form">
-                <input type="text" id="digit-1" name="digit-1" data-next="digit-2" required/>
-                <input type="text" id="digit-2" name="digit-2" data-next="digit-3" data-previous="digit-1" required/>
-                <input type="text" id="digit-3" name="digit-3" data-next="digit-4" data-previous="digit-2" required/>
-                <input type="text" id="digit-4" name="digit-4" data-next="digit-5" data-previous="digit-3" required/>
-                <input type="text" id="digit-5" name="digit-5" data-next="digit-6" data-previous="digit-4" required/>
-                <input type="text" id="digit-6" name="digit-6" data-previous="digit-5" required/>
+                <input type="text" id="digit-1" class="input-otp" name="digit-1" data-next="digit-2" required/>
+                <input type="text" id="digit-2" class="input-otp" name="digit-2" data-next="digit-3" data-previous="digit-1" required/>
+                <input type="text" id="digit-3" class="input-otp" name="digit-3" data-next="digit-4" data-previous="digit-2" required/>
+                <input type="text" id="digit-4" class="input-otp" name="digit-4" data-next="digit-5" data-previous="digit-3" required/>
+                <input type="text" id="digit-5" class="input-otp" name="digit-5" data-next="digit-6" data-previous="digit-4" required/>
+                <input type="text" id="digit-6" class="input-otp" name="digit-6" data-previous="digit-5" required/>
             </div>
             <div class="timeout-otp">
                 <p class="count-down">Kirim ulang kode dalam</p>
@@ -235,6 +240,19 @@
                 });
             });
 
+            $(".input-otp").bind("paste", function(e){
+                // access the clipboard using the api
+                var pastedData = e.originalEvent.clipboardData.getData('text');
+                let splitData = pastedData.split("");
+                for(let i=0; i<splitData.length; i++){
+                    let strDigit = "#digit-" + (i + 1);
+                    $(strDigit)[0].value = splitData[i];
+                    if(i==5){
+                        break  
+                    }
+                }
+            });
+
             var timer2 = "0:10";
             var interval = setInterval(function() {
                 var timer = timer2.split(':');
@@ -264,6 +282,67 @@
                 $("#resendOtp").css("pointer-events", "none");
                 
                 // send request otp
+            })
+
+            // disable submit if there are empties field
+            const nextButton = (inputEmpty) => {
+                if (inputEmpty) {
+                    $('#submitForm').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+                    $('#submitForm').css({                  
+                        "color": "#98A2B3",
+                        "background-color": "#EAECF0",
+                        "border": "1px solid #EAECF0"
+                    })
+                    $("#submitForm").hover(function() {
+                        $(this).css({
+                            "background-color": "#EAECF0",
+                            "cursor": "default",
+                            "color": "#98A2B3"
+                        })
+                    });                    
+                } else {
+                    $('#submitForm').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
+                    $('#submitForm').css({
+                        "background-color": "#FF8736", 
+                        "color": "white",
+                        "border": "1px solid #FF8736",                  
+                    })
+                    $("#submitForm").hover(function() {
+                        $(this).css({
+                            "background-color": "#df7b38",
+                            "cursor": "pointer",
+                            "color": "rgb(227, 219, 219)"
+                        })
+                    });
+                }
+            }
+            
+            var inputEmpty = false;
+
+            // handle reload page for nextButton
+            $('#form input[type=text]').each(function() {
+                // inputEmpty = false;
+
+                if ($(this).val() == '') {
+                    inputEmpty = true;
+                }
+                
+                // console.log(inputEmpty)
+                nextButton(inputEmpty);
+            })
+
+            $('#form input[type=text]').keyup(function() {
+                inputEmpty = false;
+
+                $('#form input[type=text]').each(function() {
+                    // console.log($(this))
+                    if (($(this).val() == '')) {
+                        inputEmpty = true;
+                    }
+                })
+                
+                console.log(inputEmpty)
+                nextButton(inputEmpty);
             })
 
             $("#form").on("submit", function(e){
