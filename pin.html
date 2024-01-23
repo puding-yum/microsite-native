@@ -105,14 +105,36 @@
         }
         
         #submitButton > button{
-            color: #98A2B3;
-            background-color: #EAECF0;
-            border: 1px solid #EAECF0;
             font-weight: 600;
             font-size: 16px;
             width: 100%;
             height: 48px;
             border-radius: 24px;
+        }
+        
+        .active-button{
+            color: white;
+            background-color: #FF8736; 
+            border: 1px solid #FF8736;                  
+            cursor: pointer;
+        }
+        
+        .active-button:hover{
+            background-color: #df7b38;
+            color: #e3dbdb
+        }
+        
+        .loading-button{
+            color: #e3dbdb;
+            background-color: #df7b38;
+            border: 1px solid #FF8736;                  
+        }
+
+        .nonactive-button{
+            color: #98A2B3;
+            background-color: #EAECF0;
+            border: 1px solid #EAECF0;
+            cursor: default;
         }
 
         #loadingIcon{
@@ -174,15 +196,18 @@
                 <input type="password" id="digit-6" name="digit-6" data-previous="digit-5" required/>
             </div>
             <div id="submitButton">
-                <button type="submit" id="submitForm">
+                <button type="submit" id="submitForm" class="nonactive-button">
                     <span id="loadingIcon"><img src="./images/loader.svg"></span>
                     <span id="buttonText">Lanjutkan</span>
                 </button>
             </div>
         </form>
+
+        <p class="response"></p>
     </div>
     <script>
         $(document).ready(function(){
+            // input pin formatter
             $('#pin-form').find('input').each(function() {
                 $(this).attr('maxlength', 1);
                 $(this).on('keyup', function(e) {
@@ -208,42 +233,24 @@
                 });
             });
 
-            // disable submit if there are empties field
+            // disable enable submit button by otp form condition
             const nextButton = (inputEmpty) => {
                 if (inputEmpty) {
                     $('#submitForm').attr('disabled', 'disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
-                    $('#submitForm').css({                  
-                        "color": "#98A2B3",
-                        "background-color": "#EAECF0",
-                        "border": "1px solid #EAECF0"
-                    })
-                    $("#submitForm").hover(function() {
-                        $(this).css({
-                            "background-color": "#EAECF0",
-                            "cursor": "default",
-                            "color": "#98A2B3"
-                        })
-                    });                    
+                    $('#submitForm').removeClass('active-button')                  
+                    $('#submitForm').addClass('nonactive-button')                  
+                                    
                 } else {
                     $('#submitForm').removeAttr('disabled'); // updated according to http://stackoverflow.com/questions/7637790/how-to-remove-disabled-attribute-with-jquery-ie
-                    $('#submitForm').css({
-                        "background-color": "#FF8736", 
-                        "color": "white",
-                        "border": "1px solid #FF8736",                  
-                    })
-                    $("#submitForm").hover(function() {
-                        $(this).css({
-                            "background-color": "#df7b38",
-                            "cursor": "pointer",
-                            "color": "rgb(227, 219, 219)"
-                        })
-                    });
+                    $('#submitForm').removeClass('nonactive-button')                  
+                    $('#submitForm').addClass('active-button')
+                    
                 }
             }
             
             var inputEmpty = false;
 
-            // handle reload page for nextButton
+            // disable enable submit button on page reload
             $('#form input[type=password]').each(function() {
                 // inputEmpty = false;
                 if ($(this).val() == '') {
@@ -282,7 +289,9 @@
 
                 $("#buttonText").hide()
                 $("#loadingIcon").show()
-                $("#submitForm").attr("disabled", true);                   
+                $('#submitForm').removeClass('active-button')                  
+                $('#submitForm').addClass('loading-button')
+                $("#submitForm").attr("disabled", "disabled");
                 $.ajax({
                     type: 'post',
                     url: 'http://localhost:8080/pin',
@@ -292,13 +301,18 @@
                         $("#loadingIcon").hide()
                         $("#buttonText").show()
                         
-                        if(data["pin"] == '111111'){
+                        if(data["response_code"] == 'SUCCESS'){
                             location.href = "http://127.0.0.1:5500/success.html"
+                        }else{
+                            $(".response").css("margin-top", "10px")
+                            $(".response").append(JSON.stringify(data))                            
                         }
 
+                        $('#submitForm').removeClass('loading-button')
+                        $('#submitForm').addClass('active-button')                  
+                        $("#submitForm").removeAttr("disabled");
                     }
                 });
-                $("#submitForm").attr("disabled", false);
             })
         })
     </script>

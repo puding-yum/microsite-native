@@ -61,20 +61,29 @@
         }
         
         #submitButton > button{
-            color: white;
-            background-color: #FF8736;
-            border: 1px solid #FF8736;
             font-weight: 600;
             font-size: 16px;
             width: 100%;
             height: 48px;
             border-radius: 24px;
         }
-
-        #submitButton > button:hover{
-            background-color: #df7b38;
+        
+        .active-button{
+            color: white;
+            background-color: #FF8736; 
+            border: 1px solid #FF8736;                  
             cursor: pointer;
-            color: rgb(227, 219, 219);
+        }
+        
+        .active-button:hover{
+            background-color: #df7b38;
+            color: #e3dbdb
+        }
+        
+        .loading-button{
+            color: #e3dbdb;
+            background-color: #df7b38;
+            border: 1px solid #FF8736;                  
         }
 
         #loadingIcon{
@@ -127,7 +136,7 @@
             <p>Pendaftaran kartu telah berhasil. Sekarang Anda bisa melakukan transaksi di “Tokopedia” dengan kartu debit Instan BNI.</p>
             <p class="response"></p>
             <div id="submitButton">
-                <button type="bu" id="submitForm">
+                <button type="bu" id="submitForm" class="active-button">
                     <span id="loadingIcon"><img src="./images/loader.svg"></span>
                     <span id="buttonText">Tutup</span>
                 </button>
@@ -140,7 +149,9 @@
             $("#submitForm").on("click", function(){
                 $("#buttonText").hide()
                 $("#loadingIcon").show()
-                $("#submitForm").attr("disabled", true);                   
+                $('#submitForm').removeClass('active-button')                  
+                $('#submitForm').addClass('loading-button')
+                $("#submitForm").attr("disabled", "disabled");
                 $.ajax({
                     type: 'post',
                     url: 'http://localhost:8080/redirect',
@@ -148,14 +159,13 @@
                     success: function (data) {
                         $("#loadingIcon").hide()
                         $("#buttonText").show()
-
-                        console.log(data)
-
                         $(".response").css("margin-top", "10px")
                         $(".response").append(JSON.stringify(data))
+                        $('#submitForm').removeClass('loading-button')                  
+                        $('#submitForm').addClass('active-button')
+                        $("#submitForm").removeAttr("disabled");
                     }
                 });
-                $("#submitForm").attr("disabled", false);
             })
         })
     </script>
